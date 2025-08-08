@@ -111,39 +111,24 @@ export default {
       this.isGenerating = true
       this.generatedCode = ''
       this.copied = false
-      
       try {
-        // Simulate API call for now - replace with actual Anthropic API call later
-        await this.simulateAPICall()
+        const res = await fetch('/api/generate', {
+          method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: this.prompt })
+        })
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}))
+          throw new Error(err.error || 'Request failed')
+        }
+        const data = await res.json()
+        this.generatedCode = data.code || ''
       } catch (error) {
         console.error('Error generating code:', error)
-        this.generatedCode = 'Error: Failed to generate code. Please try again.'
+        this.generatedCode = 'error: failed to generate code. please try again.'
       } finally {
         this.isGenerating = false
       }
-    },
-    
-    async simulateAPICall() {
-      // Simulate network delay
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      const userPrompt = this.prompt.toLowerCase()
-      let code = ''
-      
-      if (userPrompt.includes('rainbow') || userPrompt.includes('color')) {
-        code = `10 REM RAINBOW DISPLAY PROGRAM\n20 FOR I = 0 TO 15\n30 POKE 53280, I\n40 POKE 53281, I\n50 PRINT CHR$(147); "    RAINBOW COLORS!"\n60 FOR J = 1 TO 200: NEXT J\n70 NEXT I\n80 GOTO 20`
-      } else if (userPrompt.includes('hello') || userPrompt.includes('moving')) {
-        code = `10 REM MOVING TEXT DEMO\n20 PRINT CHR$(147)\n30 FOR X = 0 TO 30\n40 PRINT CHR$(19)\n50 FOR Y = 1 TO X\n60 PRINT " ";\n70 NEXT Y\n80 PRINT "HELLO WORLD"\n90 FOR T = 1 TO 100: NEXT T\n100 NEXT X\n110 GOTO 30`
-      } else if (userPrompt.includes('pattern') || userPrompt.includes('checkerboard')) {
-        code = `10 REM CHECKERBOARD PATTERN\n20 PRINT CHR$(147)\n30 FOR Y = 0 TO 24\n40 FOR X = 0 TO 39\n50 IF (X + Y) AND 1 THEN PRINT CHR$(160);\n60 IF NOT((X + Y) AND 1) THEN PRINT " "\n70 NEXT X\n80 PRINT\n90 NEXT Y\n100 GET A$: IF A$ = "" THEN 100\n110 RUN`
-      } else if (userPrompt.includes('guess') || userPrompt.includes('game')) {
-        code = `10 REM NUMBER GUESSING GAME\n20 PRINT CHR$(147)\n30 PRINT "GUESS THE NUMBER (1-100)"\n40 N = INT(RND(1) * 100) + 1\n50 T = 0\n60 INPUT "YOUR GUESS"; G\n70 T = T + 1\n80 IF G = N THEN 120\n90 IF G < N THEN PRINT "TOO LOW!"\n100 IF G > N THEN PRINT "TOO HIGH!"\n110 GOTO 60\n120 PRINT "CORRECT! YOU GOT IT IN"; T; "TRIES"\n130 PRINT "PLAY AGAIN (Y/N)?"\n140 GET A$: IF A$ = "" THEN 140\n150 IF A$ = "Y" THEN 20\n160 END`
-      } else {
-        code = `10 REM GENERATED C64 BASIC PROGRAM\n20 PRINT CHR$(147)\n30 PRINT "HELLO FROM CLAUDE2C64!"\n40 PRINT\n50 PRINT "THIS IS A SAMPLE PROGRAM"\n60 PRINT "GENERATED FROM YOUR PROMPT:"\n70 PRINT "\"${this.prompt}\""\n80 PRINT\n90 PRINT "PRESS ANY KEY TO CONTINUE"\n100 GET A$: IF A$ = "" THEN 100\n110 END`
-      }
-      
-      // Convert to lowercase for emulator paste requirement
-      this.generatedCode = code.toLowerCase()
     },
     
     clearAll() {
