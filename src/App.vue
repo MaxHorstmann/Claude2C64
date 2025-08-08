@@ -127,72 +127,23 @@ export default {
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 2000))
       
-      // Mock response based on prompt keywords
-      const prompt = this.prompt.toLowerCase()
+      const userPrompt = this.prompt.toLowerCase()
+      let code = ''
       
-      if (prompt.includes('rainbow') || prompt.includes('color')) {
-        this.generatedCode = `10 REM RAINBOW DISPLAY PROGRAM
-20 FOR I = 0 TO 15
-30 POKE 53280, I
-40 POKE 53281, I
-50 PRINT CHR$(147); "    RAINBOW COLORS!"
-60 FOR J = 1 TO 200: NEXT J
-70 NEXT I
-80 GOTO 20`
-      } else if (prompt.includes('hello') || prompt.includes('moving')) {
-        this.generatedCode = `10 REM MOVING TEXT DEMO
-20 PRINT CHR$(147)
-30 FOR X = 0 TO 30
-40 PRINT CHR$(19)
-50 FOR Y = 1 TO X
-60 PRINT " ";
-70 NEXT Y
-80 PRINT "HELLO WORLD"
-90 FOR T = 1 TO 100: NEXT T
-100 NEXT X
-110 GOTO 30`
-      } else if (prompt.includes('pattern') || prompt.includes('checkerboard')) {
-        this.generatedCode = `10 REM CHECKERBOARD PATTERN
-20 PRINT CHR$(147)
-30 FOR Y = 0 TO 24
-40 FOR X = 0 TO 39
-50 IF (X + Y) AND 1 THEN PRINT CHR$(160);
-60 IF NOT((X + Y) AND 1) THEN PRINT " ";
-70 NEXT X
-80 PRINT
-90 NEXT Y
-100 GET A$: IF A$ = "" THEN 100
-110 RUN`
-      } else if (prompt.includes('guess') || prompt.includes('game')) {
-        this.generatedCode = `10 REM NUMBER GUESSING GAME
-20 PRINT CHR$(147)
-30 PRINT "GUESS THE NUMBER (1-100)"
-40 N = INT(RND(1) * 100) + 1
-50 T = 0
-60 INPUT "YOUR GUESS"; G
-70 T = T + 1
-80 IF G = N THEN 120
-90 IF G < N THEN PRINT "TOO LOW!"
-100 IF G > N THEN PRINT "TOO HIGH!"
-110 GOTO 60
-120 PRINT "CORRECT! YOU GOT IT IN"; T; "TRIES"
-130 PRINT "PLAY AGAIN (Y/N)?"
-140 GET A$: IF A$ = "" THEN 140
-150 IF A$ = "Y" THEN 20
-160 END`
+      if (userPrompt.includes('rainbow') || userPrompt.includes('color')) {
+        code = `10 REM RAINBOW DISPLAY PROGRAM\n20 FOR I = 0 TO 15\n30 POKE 53280, I\n40 POKE 53281, I\n50 PRINT CHR$(147); "    RAINBOW COLORS!"\n60 FOR J = 1 TO 200: NEXT J\n70 NEXT I\n80 GOTO 20`
+      } else if (userPrompt.includes('hello') || userPrompt.includes('moving')) {
+        code = `10 REM MOVING TEXT DEMO\n20 PRINT CHR$(147)\n30 FOR X = 0 TO 30\n40 PRINT CHR$(19)\n50 FOR Y = 1 TO X\n60 PRINT " ";\n70 NEXT Y\n80 PRINT "HELLO WORLD"\n90 FOR T = 1 TO 100: NEXT T\n100 NEXT X\n110 GOTO 30`
+      } else if (userPrompt.includes('pattern') || userPrompt.includes('checkerboard')) {
+        code = `10 REM CHECKERBOARD PATTERN\n20 PRINT CHR$(147)\n30 FOR Y = 0 TO 24\n40 FOR X = 0 TO 39\n50 IF (X + Y) AND 1 THEN PRINT CHR$(160);\n60 IF NOT((X + Y) AND 1) THEN PRINT " "\n70 NEXT X\n80 PRINT\n90 NEXT Y\n100 GET A$: IF A$ = "" THEN 100\n110 RUN`
+      } else if (userPrompt.includes('guess') || userPrompt.includes('game')) {
+        code = `10 REM NUMBER GUESSING GAME\n20 PRINT CHR$(147)\n30 PRINT "GUESS THE NUMBER (1-100)"\n40 N = INT(RND(1) * 100) + 1\n50 T = 0\n60 INPUT "YOUR GUESS"; G\n70 T = T + 1\n80 IF G = N THEN 120\n90 IF G < N THEN PRINT "TOO LOW!"\n100 IF G > N THEN PRINT "TOO HIGH!"\n110 GOTO 60\n120 PRINT "CORRECT! YOU GOT IT IN"; T; "TRIES"\n130 PRINT "PLAY AGAIN (Y/N)?"\n140 GET A$: IF A$ = "" THEN 140\n150 IF A$ = "Y" THEN 20\n160 END`
       } else {
-        this.generatedCode = `10 REM GENERATED C64 BASIC PROGRAM
-20 PRINT CHR$(147)
-30 PRINT "HELLO FROM CLAUDE2C64!"
-40 PRINT
-50 PRINT "THIS IS A SAMPLE PROGRAM"
-60 PRINT "GENERATED FROM YOUR PROMPT:"
-70 PRINT "\"${this.prompt}\""
-80 PRINT
-90 PRINT "PRESS ANY KEY TO CONTINUE"
-100 GET A$: IF A$ = "" THEN 100
-110 END`
+        code = `10 REM GENERATED C64 BASIC PROGRAM\n20 PRINT CHR$(147)\n30 PRINT "HELLO FROM CLAUDE2C64!"\n40 PRINT\n50 PRINT "THIS IS A SAMPLE PROGRAM"\n60 PRINT "GENERATED FROM YOUR PROMPT:"\n70 PRINT "\"${this.prompt}\""\n80 PRINT\n90 PRINT "PRESS ANY KEY TO CONTINUE"\n100 GET A$: IF A$ = "" THEN 100\n110 END`
       }
+      
+      // Convert to lowercase for emulator paste requirement
+      this.generatedCode = code.toLowerCase()
     },
     
     clearAll() {
@@ -381,6 +332,7 @@ export default {
   overflow-x: auto;
   white-space: pre;
   border: 2px solid #00ff00;
+  text-transform: uppercase;
 }
 
 .examples-section {
