@@ -10,7 +10,7 @@
         <h2>Describe your C64 program:</h2>
         <textarea
           v-model="prompt"
-          placeholder="Example: Create a program that displays a rainbow effect on the screen with moving text that says 'HELLO WORLD'"
+          placeholder="Describe the program you want (e.g., a rainbow effect with moving text)"
           rows="4"
           class="prompt-input"
         ></textarea>
@@ -50,21 +50,6 @@
           </button>
         </div>
       </div>
-
-      <div class="examples-section">
-        <h2>Example Prompts:</h2>
-        <div class="examples">
-          <div 
-            v-for="example in examples" 
-            :key="example.title"
-            class="example-card"
-            @click="useExample(example.prompt)"
-          >
-            <h3>{{ example.title }}</h3>
-            <p>{{ example.description }}</p>
-          </div>
-        </div>
-      </div>
     </main>
 
     <footer class="footer">
@@ -81,29 +66,7 @@ export default {
       prompt: '',
       generatedCode: '',
       isGenerating: false,
-      copied: false,
-      examples: [
-        {
-          title: 'Rainbow Colors',
-          description: 'Create a colorful display with cycling colors',
-          prompt: 'Create a program that cycles through different background colors and displays "COMMODORE 64" in the center'
-        },
-        {
-          title: 'Simple Animation',
-          description: 'Moving text across the screen',
-          prompt: 'Make a program where the text "HELLO WORLD" moves from left to right across the screen'
-        },
-        {
-          title: 'Pattern Generator',
-          description: 'Create repeating visual patterns',
-          prompt: 'Generate a program that creates a checkerboard pattern using character graphics'
-        },
-        {
-          title: 'User Input Game',
-          description: 'Simple interactive program',
-          prompt: 'Create a number guessing game where the computer picks a random number and the user tries to guess it'
-        }
-      ]
+      copied: false
     }
   },
   methods: {
@@ -114,8 +77,8 @@ export default {
       try {
         const res = await fetch('/api/generate', {
           method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt: this.prompt })
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt: this.prompt })
         })
         if (!res.ok) {
           const err = await res.json().catch(() => ({}))
@@ -136,18 +99,12 @@ export default {
       this.generatedCode = ''
       this.copied = false
     },
-    
-    useExample(examplePrompt) {
-      this.prompt = examplePrompt
-    },
-    
+
     async copyToClipboard() {
       try {
         await navigator.clipboard.writeText(this.generatedCode)
         this.copied = true
-        setTimeout(() => {
-          this.copied = false
-        }, 2000)
+        setTimeout(() => { this.copied = false }, 2000)
       } catch (error) {
         console.error('Failed to copy to clipboard:', error)
       }
@@ -282,14 +239,9 @@ export default {
   color: #ffffff;
 }
 
-.code-container {
-  position: relative;
-}
+.code-container { position: relative; }
 
-.loading {
-  text-align: center;
-  padding: 40px;
-}
+.loading { text-align: center; padding: 40px; }
 
 .loading-spinner {
   width: 40px;
@@ -301,10 +253,7 @@ export default {
   animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 .code-output {
   background: #000;
@@ -320,69 +269,10 @@ export default {
   text-transform: uppercase;
 }
 
-.examples-section {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 30px;
-  border-radius: 10px;
-}
-
-.examples-section h2 {
-  margin-top: 0;
-  color: #ffffff;
-}
-
-.examples {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.example-card {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-}
-
-.example-card:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: #a5a5ff;
-  transform: translateY(-2px);
-}
-
-.example-card h3 {
-  margin: 0 0 10px 0;
-  color: #ffffff;
-  font-size: 1.1rem;
-}
-
-.example-card p {
-  margin: 0;
-  color: #ddd;
-  font-size: 0.9rem;
-}
-
-.footer {
-  text-align: center;
-  margin-top: 40px;
-  color: #ccc;
-  font-size: 0.9rem;
-}
+.footer { text-align: center; margin-top: 40px; color: #ccc; font-size: 0.9rem; }
 
 @media (max-width: 768px) {
-  .header h1 {
-    font-size: 2rem;
-  }
-  
-  .button-group {
-    flex-direction: column;
-  }
-  
-  .examples {
-    grid-template-columns: 1fr;
-  }
+  .header h1 { font-size: 2rem; }
+  .button-group { flex-direction: column; }
 }
 </style>
