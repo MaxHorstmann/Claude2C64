@@ -35,7 +35,7 @@
 
       <div class="result-section" v-if="generatedCode || isGenerating">
         <h2>Generated C64 BASIC Code:</h2>
-        <div class="code-container">
+        <div class="code-container c64-screen">
           <div v-if="isGenerating" class="loading">
             <div class="loading-spinner"></div>
             <p>Claude is generating your C64 BASIC program...</p>
@@ -228,9 +228,9 @@ export default {
 }
 
 .result-section {
-  background: rgba(0, 0, 0, 0.4);
-  padding: 30px;
-  border-radius: 10px;
+  background: transparent;
+  padding: 30px 0;
+  border-radius: 0;
   margin-bottom: 30px;
 }
 
@@ -241,14 +241,28 @@ export default {
 
 .code-container { position: relative; }
 
-.loading { text-align: center; padding: 40px; }
+/* Commodore 64 style screen wrapper */
+.c64-screen {
+  /* classic C64-ish palette */
+  --c64-border: #6c5eb5;   /* border light blue/purple */
+  --c64-bg: #3b31a2;       /* screen dark blue */
+  --c64-text: #a8a8ff;     /* light blue text */
+
+  border: 18px solid var(--c64-border);
+  background: var(--c64-bg);
+  padding: 18px;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 4px var(--c64-bg), 0 6px 20px rgba(0,0,0,0.25);
+}
+
+.loading { text-align: center; padding: 40px; color: var(--c64-text); }
 
 .loading-spinner {
   width: 40px;
   height: 40px;
   margin: 0 auto 20px;
-  border: 4px solid #333;
-  border-top: 4px solid #00ff00;
+  border: 4px solid rgba(255,255,255,0.15);
+  border-top: 4px solid var(--c64-text);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -256,17 +270,18 @@ export default {
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 .code-output {
-  background: #000;
-  color: #00ff00;
-  padding: 20px;
-  border-radius: 5px;
+  background: transparent; /* inherits from c64-screen */
+  color: var(--c64-text);
+  padding: 8px 4px;
+  border-radius: 0;
   font-family: 'Courier New', monospace;
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 1.35;
   overflow-x: auto;
   white-space: pre;
-  border: 2px solid #00ff00;
+  border: none;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .footer { text-align: center; margin-top: 40px; color: #ccc; font-size: 0.9rem; }
