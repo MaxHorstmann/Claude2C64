@@ -2,6 +2,8 @@
 
 Experimental project to generate Commodore 64 BASIC programs using Claude AI.
 
+Try it out: https://claude2-c64.vercel.app/
+
 ## Features
 
 - Web-based interface for prompting Claude to generate C64 BASIC code
