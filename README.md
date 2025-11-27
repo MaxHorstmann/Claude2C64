@@ -13,10 +13,25 @@ Try it out: https://claude2-c64.vercel.app/
 
 ## Getting Started
 
+### Option 1: Using Dev Container (Recommended)
+
+If you're using VS Code or Cursor, you can use the included dev container:
+
+1. Open the project in VS Code/Cursor
+2. Press `F1` → "Dev Containers: Reopen in Container"
+3. Wait for the container to build and dependencies to install
+4. Create `.env.local` with your `ANTHROPIC_API_KEY`
+5. Run `npm run dev:api`
+
+The dev container includes Node.js, npm, and Vercel CLI pre-installed.
+
+### Option 2: Local Development
+
 ### Prerequisites
 
 - Node.js 18+ 
 - npm or yarn
+- Vercel CLI (for API development): `npm install -g vercel`
 
 ### Installation
 
@@ -31,12 +46,21 @@ cd Claude2C64
 npm install
 ```
 
-3. Start the development server:
+3. Create `.env.local` file with your Anthropic API key:
 ```bash
+echo "ANTHROPIC_API_KEY=your_api_key_here" > .env.local
+```
+
+4. Start the development server:
+```bash
+# For frontend + API together
+npm run dev:api
+
+# Or just frontend (API won't work)
 npm run dev
 ```
 
-4. Open your browser to `http://localhost:3000`
+5. Open your browser to `http://localhost:3000`
 
 ## Usage
 
