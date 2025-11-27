@@ -1,0 +1,51 @@
+{
+  "name": "Claude2C64 Development",
+  
+  // Use the base image - workspace will be auto-mounted
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bullseye",
+  
+  // Features to add to the dev container
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+
+  // Set *default* container specific settings.json values on container create.
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+        "eslint.validate": [
+          "javascript",
+          "javascriptreact",
+          "vue"
+        ],
+        "files.eol": "\n",
+        "files.trimTrailingWhitespace": true
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "vue.volar",
+        "vue.vscode-typescript-vue-plugin",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  },
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  "forwardPorts": [3000, 3001],
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  // Install Vercel CLI and project dependencies
+  "postCreateCommand": "npm install -g vercel@latest && npm install",
+
+  // Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+  "remoteUser": "node",
+
+  // Environment variables (you'll still need to set ANTHROPIC_API_KEY in .env.local)
+  "remoteEnv": {
+    "NODE_ENV": "development"
+  }
+}
+
